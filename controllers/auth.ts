@@ -32,7 +32,8 @@ export const login = async (req: Request, res: Response) => {
         const token = await generateJWT(user.id, user.name);
 
         return res.status(200).json({
-            token
+            token,
+            user
         });
 
     } catch (error) {
@@ -73,4 +74,29 @@ export const register = async (req: Request, res: Response) => {
             msg: 'Por favor hable con el administrador'
         });
     }   
+};
+
+export const renewToken = async (req: Request, res: Response) => {
+
+    const { id, email } = req.body;
+
+    try {
+
+        const user = await UserModel.findById(id);
+
+        
+        // Generar nuestro JWT
+        const token = await generateJWT(id, email);
+        
+        return res.json({
+            token,
+            user
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'No fue posible renovar el token'
+        });
+    }    
 };

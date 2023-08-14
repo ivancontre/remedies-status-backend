@@ -55,6 +55,7 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
         // esto se pasará por next a la siguiente funcion
         const user = userAuthtenticated;
         req.body.name = name;   
+        req.body.id = id;   
         req.body.email = user ? user.email : undefined;
 
         next();

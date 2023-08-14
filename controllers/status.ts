@@ -4,9 +4,9 @@ import { StatusModel } from '../models';
 export const getStatus = async (req: Request, res: Response) => {
     try {
 
-        const frecuency = await StatusModel.find();
+        const status = await StatusModel.find({ user: req.body.id });
 
-        return res.status(200).json(frecuency);
+        return res.status(200).json(status);
 
         
     } catch (error) {
@@ -19,25 +19,64 @@ export const getStatus = async (req: Request, res: Response) => {
 
 export const updateStatus = async (req: Request, res: Response) => {
     try {
-
+        
         let date = new Date();
         const { id } = req.params;
 
-        const { field, status } = req.body;
+        const { field, status
+         } = req.body;
 
         let cardPayload : any = {};
 
-        if (field === "morning") {
-            cardPayload.morning = status;
-            cardPayload.updatedat_morning = date;
-        } else {
-            cardPayload.afternoon = status;
-            cardPayload.updatedat_afternoon = date;
+        let isOpen = false;
+
+        if (status === "OPEN") {
+            isOpen = true;
         }
 
-        const cardUpdated = await StatusModel.findByIdAndUpdate(id, cardPayload, { new: true });
+        if (field === "morning") {
 
-        return res.status(200).json(cardUpdated);
+            if (isOpen) {
+                cardPayload.morning = status;
+                cardPayload.updatedat_morning = date;
+                cardPayload.afternoon = "CLOSED";
+            } else {
+                cardPayload.morning = status;
+                cardPayload.updatedat_morning = date;
+            }
+            
+        } else { // afternoon
+            if (isOpen) { 
+                cardPayload.afternoon = status;
+                cardPayload.updatedat_afternoon = date;
+                cardPayload.morning = "CLOSED";
+            } else {
+                cardPayload.afternoon = status;
+                cardPayload.updatedat_afternoon = date;
+            }
+        }
+
+        const filter = { _id: id, user: req.body.id}
+        await StatusModel.findOneAndUpdate(filter, cardPayload, { new: true });
+        const allStatus = await StatusModel.find({ user: req.body.id });        
+
+        const statusUpdate = allStatus.filter(s => (s.morning === 'OPEN' || s.afternoon === 'OPEN') && s.id !== id);
+
+        for (const day of statusUpdate) {
+            if (day.morning === "OPEN") {
+                await StatusModel.findByIdAndUpdate(day.id, {
+                    morning: "CLOSED"
+                }, { new: true });
+            } else {
+                await StatusModel.findByIdAndUpdate(day.id, {
+                    afternoon: "CLOSED"
+                }, { new: true });
+            }
+        }
+
+        const respoonse = await StatusModel.find({ user: req.body.id });   
+        
+        return res.status(200).json(respoonse);
         
     } catch (error) {
         console.log(error);
