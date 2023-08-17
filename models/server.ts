@@ -1,4 +1,5 @@
 import express from 'express';
+import sslRedirect from 'heroku-ssl-redirect';
 import cors from 'cors';
 import * as socketio from 'socket.io';
 import { createServer, Server as ServerHttp } from 'http';
@@ -35,6 +36,9 @@ export default class Server {
     }
 
     middlewares() {
+
+        this.app.use(sslRedirect());
+
         // Desplegar el directorio público
         this.app.use(express.static('public'));
         
