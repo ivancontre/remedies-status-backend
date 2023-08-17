@@ -11,7 +11,8 @@
     "express-validator": "^6.13.0",
     "jsonwebtoken": "^9.0.1",
     "moment-timezone": "^0.5.43",
-    "mongoose": "^6.0.10"
+    "mongoose": "^6.0.10",
+    "socket.io": "3.0.1"
   },
   "scripts": {
     "dev": "nodemon index.ts",

@@ -68,3 +68,18 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
     }
 
 };
+
+export const checkJWT = (token: string) => {
+    try {
+
+        const payload: JwtPayload = verify(token, process.env.SECRET_JWT_SEED as string) as JwtPayload;
+        
+        // console.log(payload)
+        const { id } = payload;
+
+        return [true, id];
+        
+    } catch (error) {
+        return [false, null];
+    }
+}
