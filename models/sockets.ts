@@ -5,6 +5,7 @@ export default class Sockets {
     io: socketio.Server;
 
     constructor( io: socketio.Server ) {
+        
         this.io = io;
         this.socketEvents();
     }
