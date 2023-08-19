@@ -37,7 +37,7 @@ export default class Server {
 
     middlewares() {
 
-        this.app.use(sslRedirect());
+        //this.app.use(sslRedirect());
 
         // Desplegar el directorio público
         this.app.use(express.static('public'));
@@ -47,8 +47,8 @@ export default class Server {
 
         // CORS
         this.app.use( cors({
-            //origin: process.env.CORS_ORIGIN
-            origin: '*'
+            origin: process.env.CORS_ORIGIN
+            //origin: '*'
         }) );
     }
 
