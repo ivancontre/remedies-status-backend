@@ -23,7 +23,7 @@ export default class Server {
         this.server = createServer(this.app);
 
         this.io = new socketio.Server(this.server, {cors: {
-            origin: process.env.CORS_ORIGIN,
+            origin: '*',
             methods: ["GET", "POST"]
         }});
     
