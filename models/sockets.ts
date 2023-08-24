@@ -12,7 +12,7 @@ export default class Sockets {
 
     socketEvents() {
 
-        this.io.on('connection', async ( socket ) => {
+        this.io.on('connection', ( socket ) => {
 
             console.log('cliente conectado')
 

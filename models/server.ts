@@ -22,10 +22,13 @@ export default class Server {
         this.port = process.env.PORT || '8080';
         this.server = createServer(this.app);
 
-        this.io = new socketio.Server(this.server, {cors: {
-            origin: '*',
-            methods: ["GET", "POST"]
-        }});
+        this.io = new socketio.Server(this.server, {
+            cors: {
+                origin: '*',
+                methods: ["GET", "POST"],
+            },
+            
+        });
     
         this.sockets = new Sockets( this.io );
 
