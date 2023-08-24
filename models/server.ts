@@ -7,15 +7,14 @@ import statusRoutes from '../routes/status';
 import authRoutes from '../routes/auth';
 import Sockets from './sockets';
 
-import { WebSocketServer } from "ws";
+import { WebSocketServer} from "ws";
 
 export default class Server {
     app: express.Application;
     port: string;
     paths: any;
     server: ServerHttp;
-    wss1: WebSocketServer;
-    wss2: WebSocketServer;
+    wss1: any;
     sockets: Sockets;
 
     constructor() {
@@ -24,10 +23,9 @@ export default class Server {
         this.port = process.env.PORT || '8080';
         this.server = createServer(this.app);
 
-        this.wss1 = new WebSocketServer({ noServer: true });
-        this.wss2 = new WebSocketServer({ noServer: true });
+        this.wss1 = new WebSocketServer({server: this.server});
     
-        this.sockets = new Sockets( this.wss1, this.wss2 );
+        this.sockets = new Sockets( this.wss1);
 
         this.paths = {
             auth: '/api/auth',
