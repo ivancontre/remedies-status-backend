@@ -1,5 +1,4 @@
 import express from 'express';
-import sslRedirect from 'heroku-ssl-redirect';
 import cors from 'cors';
 import * as socketio from 'socket.io';
 import { createServer, Server as ServerHttp } from 'http';
@@ -8,12 +7,15 @@ import statusRoutes from '../routes/status';
 import authRoutes from '../routes/auth';
 import Sockets from './sockets';
 
+import { WebSocketServer } from "ws";
+
 export default class Server {
     app: express.Application;
     port: string;
     paths: any;
     server: ServerHttp;
-    io: socketio.Server;
+    wss1: WebSocketServer;
+    wss2: WebSocketServer;
     sockets: Sockets;
 
     constructor() {
@@ -22,15 +24,10 @@ export default class Server {
         this.port = process.env.PORT || '8080';
         this.server = createServer(this.app);
 
-        this.io = new socketio.Server(this.server, {
-            cors: {
-                origin: '*',
-                methods: ["GET", "POST"],
-            },
-            
-        });
+        this.wss1 = new WebSocketServer({ noServer: true });
+        this.wss2 = new WebSocketServer({ noServer: true });
     
-        this.sockets = new Sockets( this.io );
+        this.sockets = new Sockets( this.wss1, this.wss2 );
 
         this.paths = {
             auth: '/api/auth',

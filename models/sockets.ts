@@ -1,44 +1,28 @@
 import * as socketio from 'socket.io';
 import { checkJWT } from '../helpers';
 
-export default class Sockets {
-    io: socketio.Server;
+import { WebSocketServer } from "ws";
 
-    constructor( io: socketio.Server ) {
-        
-        this.io = io;
+export default class Sockets {
+    wss1: WebSocketServer;
+    wss2: WebSocketServer;
+
+    constructor( wss1: WebSocketServer, wss2: WebSocketServer ) {        
+        this.wss1 = wss1;
+        this.wss2 = wss2;
         this.socketEvents();
     }
 
     socketEvents() {
 
-        this.io.on('connection', ( socket ) => {
-
-            console.log('cliente conectado')
-
-            const token = socket.handshake.query['x-token'];
-
-            const [valid, id] = checkJWT(token);
-
-            console.log('id', id);
-
-            if (!valid) {
-                console.log('socket no identificado');
-                return socket.disconnect();
-            }
-
-            socket.join(id);
-
-            socket.on('changes', async ({ id }: any) => {                
-                socket.broadcast.to(id).emit('load-changes');
-            });
-
-            socket.on('disconnect', async (data: any) => {
-                console.log('Cliente desconectado...');
-            });
-
+        this.wss1.on("connection", function connection(socket) {
+            console.log("wss1:: User connected");
         });
 
+        
+        this.wss2.on("connection", function connection(socket) {
+            console.log("wss2:: User connected");
+        });
     }
 
 }
