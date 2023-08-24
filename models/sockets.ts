@@ -15,12 +15,12 @@ export default class Sockets {
         this.wss1.on("connection", function connection(socket) {
             console.log("wss1:: User connected");
 
-            
+            socket.on('message', function message(data) {
+                console.log('received: %s', data);
+            });
         });
 
-        this.wss1.on('message', function message(data) {
-            console.log('received: %s', data);
-          });
+        
 
         this.wss1.on('error', console.error);
     }
