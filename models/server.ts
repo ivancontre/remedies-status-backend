@@ -70,9 +70,17 @@ export default class Server {
 
         this.routes();
 
+        this.onSockets();
+
         // Inicializar Server
         this.server.listen( this.port, () => {
             console.log('Server corriendo en puerto:', this.port );
         });
+    }
+
+    onSockets() {
+        this.server.on("upgrade", function upgrade(request, socket, head) {
+            console.log(`holaaaaaaaaaaw`);
+        })
     }
 };
