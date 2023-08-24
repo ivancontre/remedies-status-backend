@@ -1,28 +1,54 @@
-import * as socketio from 'socket.io';
 import { checkJWT } from '../helpers';
+import url from 'url'
 
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 
 export default class Sockets {
-    wss1: WebSocketServer;
+    wss: WebSocketServer;
 
-    constructor( wss1: WebSocketServer ) {        
-        this.wss1 = wss1;
+    constructor( wss: WebSocketServer ) {        
+        this.wss = wss;
         this.socketEvents();
     }
 
     socketEvents() {
-        this.wss1.on("connection", function connection(socket) {
-            console.log("wss1:: User connected");
+        const wss = this.wss;
+
+        let users: any = {};
+
+
+        this.wss.on("connection", function connection(socket, request) {
+            console.log("wss:: User connected");
+
+            const queryData = url.parse(request.url || '', true).query;
+
+            let token: string = queryData['x-token'] as string;
+
+            const [valid, id] = checkJWT(token);
+
+            if (valid) {
+                users[id] = socket;
+            }
 
             socket.on('message', function message(data) {
-                console.log('received: %s', data);
+                const esp32Id = data.toString().replace('CALL_API=', '');
+                console.log(id + 'enviando a ESP32 '+ esp32Id)
+                if (users[esp32Id]) {
+                    users[esp32Id].send('message');
+                } else {
+                    console.log('ESP32 '+ esp32Id + ' no conectado');
+                }
+            });
+
+            socket.on('close', () => {
+                console.log('Client disconnected');
+                delete users[id];
             });
         });
 
         
 
-        this.wss1.on('error', console.error);
+        this.wss.on('error', console.error);
     }
 
 }

@@ -6,6 +6,7 @@ import { dbConnection } from '../database/config';
 import statusRoutes from '../routes/status';
 import authRoutes from '../routes/auth';
 import Sockets from './sockets';
+import url from 'url'
 
 import { WebSocketServer} from "ws";
 
@@ -78,7 +79,14 @@ export default class Server {
 
     onSockets() {
         this.server.on("upgrade", function upgrade(request, socket, head) {
-            console.log(`holaaaaaaaaaaw`);
+            const queryData = url.parse(request.url || '', true).query;
+
+
+            let token = queryData['x-token'];
+            if (!token) {
+                console.log('Token inválido')
+                socket.destroy();
+            }
         })
     }
 };
