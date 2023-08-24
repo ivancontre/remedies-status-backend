@@ -36,7 +36,7 @@ export default class Sockets {
                 const esp32Id = data.toString().replace('CALL_API=', '');
                 console.log(id + ' enviando a ESP32 '+ esp32Id)
                 if (users[esp32Id]) {
-                    users[esp32Id].send('message');
+                    users[esp32Id].send('CALL_API');
                 } else {
                     console.log('ESP32 '+ esp32Id + ' no conectado');
                 }
