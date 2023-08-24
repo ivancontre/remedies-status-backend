@@ -18,7 +18,7 @@ export default class Sockets {
 
 
         this.wss.on("connection", function connection(socket, request) {
-            console.log("wss:: User connected");
+            
 
             const queryData = url.parse(request.url || '', true).query;
 
@@ -26,13 +26,15 @@ export default class Sockets {
 
             const [valid, id] = checkJWT(token);
 
+            console.log("wss:: User " + id + " connected");
+
             if (valid) {
                 users[id] = socket;
             }
 
             socket.on('message', function message(data) {
                 const esp32Id = data.toString().replace('CALL_API=', '');
-                console.log(id + 'enviando a ESP32 '+ esp32Id)
+                console.log(id + ' enviando a ESP32 '+ esp32Id)
                 if (users[esp32Id]) {
                     users[esp32Id].send('message');
                 } else {
