@@ -66,7 +66,7 @@ export default class Sockets {
                 const esp32Id = queryData.esp32Id as string;
                 console.log(id + ' enviando a ESP32 '+ esp32Id)
                 if (users[esp32Id]) {
-                    users[esp32Id].send(message);
+                    users[esp32Id].send(JSON.stringify(message));
                 } else {
                     console.log('ESP32 '+ esp32Id + ' no conectado');
                 }
