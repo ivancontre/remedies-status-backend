@@ -14,12 +14,10 @@ const schema: Schema = new Schema({
     },
     enabledAM: { 
         type: Boolean, 
-        required: [true, 'the "enabledAM" is required'],
         default: false
     },
     enabledPM: { 
         type: Boolean, 
-        required: [true, 'the "enabledPM" is required'],
         default: false
     },
     updatedatAM: { 
@@ -35,7 +33,7 @@ schema.methods.toJSON = function () {
     const { __v, _id, updatedatAM, updatedatPM, ...status } = this.toObject();
     status.id = _id;
     status.updatedatAM = moment(updatedatAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
-    status.updatedatPM= moment(updatedatAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
+    status.updatedatPM = moment(updatedatAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
     return status;
 
 };

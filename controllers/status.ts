@@ -1,5 +1,5 @@
 import { Request, Response} from 'express';
-import { StatusModel, StatusV2Model } from '../models';
+import { StatusModel } from '../models';
 
 export const getStatus = async (req: Request, res: Response) => {
     try {
@@ -15,26 +15,6 @@ export const getStatus = async (req: Request, res: Response) => {
             msg: 'Por favor hable con el administrador'
         });
     }
-};
-
-export const getStatusV2 = async (req: Request, res: Response) => {
-    try {
-
-        const status = await StatusV2Model.find({ user: req.body.id });
-
-        return res.status(200).json(status);
-
-        
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            msg: 'Por favor hable con el administrador'
-        });
-    }
-};
-
-export const updateStatusV2 = async (req: Request, res: Response) => {
-
 };
 
 export const updateStatus = async (req: Request, res: Response) => {
