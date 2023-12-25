@@ -23,8 +23,7 @@ export const updateStatus = async (req: Request, res: Response) => {
         let date = new Date();
         const { id } = req.params;
 
-        const { field, status
-         } = req.body;
+        const { field, status } = req.body;
 
         let cardPayload : any = {};
 

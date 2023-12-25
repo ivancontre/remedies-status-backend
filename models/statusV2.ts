@@ -20,20 +20,20 @@ const schema: Schema = new Schema({
         type: Boolean, 
         default: false
     },
-    updatedatAM: { 
+    updatedAtAM: { 
         type: Date
     },
-    updatedatPM: { 
+    updatedAtPM: { 
         type: Date
     }
 });
 
 schema.methods.toJSON = function () {
 
-    const { __v, _id, updatedatAM, updatedatPM, ...status } = this.toObject();
+    const { __v, _id, updatedAtAM, updatedAtPM, ...status } = this.toObject();
     status.id = _id;
-    status.updatedatAM = moment(updatedatAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
-    status.updatedatPM = moment(updatedatAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
+    status.updatedatAM = moment(updatedAtAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
+    status.updatedAtPM = moment(updatedAtPM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
     return status;
 
 };
