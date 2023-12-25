@@ -31,6 +31,9 @@ export const updateStatusV2 = async (req: Request, res: Response) => {
         let body : any = {};
         body[key] = value;
 
+        if (key === 'enabledAM') body['updatedAtAM'] = date;
+        if (key === 'enabledPM') body['updatedAtPM'] = date;
+
         await StatusV2Model.findOneAndUpdate(filter, body, { new: true });
 
         const respoonse = await StatusV2Model.find({ user: req.body.id });   
