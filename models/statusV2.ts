@@ -32,7 +32,7 @@ schema.methods.toJSON = function () {
 
     const { __v, _id, updatedAtAM, updatedAtPM, ...status } = this.toObject();
     status.id = _id;
-    status.updatedatAM = moment(updatedAtAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
+    status.updatedAtAM = moment(updatedAtAM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
     status.updatedAtPM = moment(updatedAtPM).tz('America/Santiago').format('YYYY-MM-DD HH:mm:ss.SSS');
     return status;
 
