@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response} from 'express';
-import { StatusV2Model } from '../models';
+import { StatusV2Model, UserModel } from '../models';
 
 export const getStatusV2 = async (req: Request, res: Response) => {
     try {

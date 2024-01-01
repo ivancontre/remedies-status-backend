@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { login, register, renewToken } from '../controllers';
+import { login, register, renewToken, updateOnline } from '../controllers';
 import { fieldsValidator } from '../middlewares';
 import { existsEmail, verifyJWT } from '../helpers';
 const router: Router = Router();
@@ -31,6 +31,12 @@ router.get(
     '/renew-token', 
     verifyJWT,
     renewToken
+);
+
+router.put(
+    '/:id/online', 
+    verifyJWT,
+    updateOnline
 );
 
 

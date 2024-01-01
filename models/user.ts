@@ -4,6 +4,8 @@ export interface IUser extends Document{
     name: string;
     email: string;
     password: string;
+    online: boolean;
+    isEsp32: boolean;
 };
 
 const schema: Schema = new Schema({
@@ -19,6 +21,14 @@ const schema: Schema = new Schema({
     password: { 
         type: String, 
         required:  [true, 'the "password" is required']  
+    },
+    online: { 
+        type: Boolean, 
+        default: false
+    },
+    isEsp32: { 
+        type: Boolean, 
+        default: false
     }
 });
 

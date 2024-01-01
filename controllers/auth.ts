@@ -100,3 +100,26 @@ export const renewToken = async (req: Request, res: Response) => {
         });
     }    
 };
+
+export const updateOnline = async (req: Request, res: Response) => {
+    try {
+
+        const { id } = req.params;
+
+        const { online } = req.body;
+
+        const filter = { _id: id, isEsp32: true };        
+
+        await UserModel.findOneAndUpdate(filter, { online }, { new: true });
+        
+        return res.status(200).json({
+            msg: 'OK'
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Por favor hable con el administrador'
+        });
+    }
+};
