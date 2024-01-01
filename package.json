@@ -13,6 +13,7 @@
     "jsonwebtoken": "^9.0.1",
     "moment-timezone": "^0.5.43",
     "mongoose": "^6.0.10",
+    "mqtt": "^5.3.4",
     "socket.io": "3.0.1",
     "ws": "^8.4.0"
   },

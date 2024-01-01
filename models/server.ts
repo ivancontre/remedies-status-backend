@@ -1,23 +1,18 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import * as socketio from 'socket.io';
 import { createServer, Server as ServerHttp } from 'http';
 import { dbConnection } from '../database/config';
 import statusRoutes from '../routes/status';
 import statusV2Routes from '../routes/statusV2';
 import authRoutes from '../routes/auth';
-import Sockets from './sockets';
-import url from 'url'
-
-import { WebSocketServer} from "ws";
+import Mqtt from './mqqt';
 
 export default class Server {
     app: express.Application;
     port: string;
     paths: any;
     server: ServerHttp;
-    wss1: any;
-    sockets: Sockets;
+    mqtt: Mqtt;
 
     constructor() {
 
@@ -25,9 +20,8 @@ export default class Server {
         this.port = process.env.PORT || '8080';
         this.server = createServer(this.app);
 
-        this.wss1 = new WebSocketServer({server: this.server});
-    
-        this.sockets = new Sockets( this.wss1);
+        this.mqtt = new Mqtt();
+        this.mqtt.connect();
 
         this.paths = {
             auth: '/api/auth',
@@ -55,7 +49,23 @@ export default class Server {
 
     routes() {
         this.app.use(this.paths.status, statusRoutes);
-        this.app.use(this.paths.statusV2, statusV2Routes);
+        this.app.use(this.paths.statusV2, statusV2Routes, async (req: Request, res: Response) => {
+
+            if (req.body.key) {
+                let { id, day, key, value } = req.body;
+
+                let message = {
+                    id,
+                    day,
+                    key,
+                    value,
+                };
+
+                this.mqtt.sendMessage(JSON.stringify(message));
+                res.status(200);
+            }
+            
+        });
         this.app.use(this.paths.auth, authRoutes);
     }
 
@@ -72,24 +82,9 @@ export default class Server {
 
         this.routes();
 
-        this.onSockets();
-
         // Inicializar Server
         this.server.listen( this.port, () => {
             console.log('Server corriendo en puerto:', this.port );
         });
-    }
-
-    onSockets() {
-        this.server.on("upgrade", function upgrade(request, socket, head) {
-            const queryData = url.parse(request.url || '', true).query;
-
-
-            let token = queryData['x-token'];
-            if (!token) {
-                console.log('Token inválido')
-                socket.destroy();
-            }
-        })
     }
 };

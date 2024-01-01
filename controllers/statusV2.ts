@@ -1,12 +1,10 @@
-import { Request, Response} from 'express';
+import { NextFunction, Request, Response} from 'express';
 import { StatusV2Model } from '../models';
 
 export const getStatusV2 = async (req: Request, res: Response) => {
     try {
 
-        console.log(req.body.id)
         const status = await StatusV2Model.find({});
-        console.log(status)
         return res.status(200).json(status);
 
         
@@ -18,7 +16,7 @@ export const getStatusV2 = async (req: Request, res: Response) => {
     }
 };
 
-export const updateStatusV2 = async (req: Request, res: Response) => {
+export const updateStatusV2 = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         let date = new Date();
@@ -38,7 +36,9 @@ export const updateStatusV2 = async (req: Request, res: Response) => {
 
         const respoonse = await StatusV2Model.find({ user: req.body.id });   
         
-        return res.status(200).json(respoonse);
+        res.status(200).json(respoonse);
+
+        next();
 
     } catch (error) {
         console.log(error);
