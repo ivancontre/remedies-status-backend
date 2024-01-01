@@ -107,6 +107,7 @@ export const updateOnline = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         const { online } = req.body;
+        console.log({online})
 
         const filter = { _id: id, isEsp32: true };        
 
