@@ -7,9 +7,9 @@ export default class Mqtt {
 	password: string;
 	constructor() {
 		this.mqttClient = null;
-		this.host = 'mqtt://broker.emqx.io:1883';
-		this.username = 'ivcontre'; // mqtt credentials if these are needed to connect
-		this.password = 'ivan28998988';
+		this.host = process.env.EMQX_HOST || '';
+		this.username = process.env.EMQX_HOST || '';
+		this.password =  process.env.EMQX_PASSWORD || '';
 	}
   
   connect() {
