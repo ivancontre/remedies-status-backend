@@ -10,6 +10,7 @@ export default class Mqtt {
 		this.host = process.env.EMQX_HOST || '';
 		this.username = process.env.EMQX_HOST || '';
 		this.password =  process.env.EMQX_PASSWORD || '';
+    
 	}
   
   connect() {
