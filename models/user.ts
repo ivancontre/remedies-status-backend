@@ -1,11 +1,12 @@
-import { Schema, model, Document, Model } from 'mongoose';
+import { Schema, model, Document, Model, PopulatedDoc } from 'mongoose';
 
 export interface IUser extends Document{
     name: string;
     email: string;
     password: string;
     online: boolean;
-    isEsp32: boolean;
+    esp32: PopulatedDoc<IUser>[]
+    user: PopulatedDoc<IUser>
 };
 
 const schema: Schema = new Schema({
@@ -26,9 +27,15 @@ const schema: Schema = new Schema({
         type: Boolean, 
         default: false
     },
-    isEsp32: { 
-        type: Boolean, 
-        default: false
+    esp32: [{
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        default: []
+    }],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        default: null
     }
 });
 

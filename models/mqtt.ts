@@ -44,9 +44,13 @@ export default class Mqtt {
   }
 
   // Sends a mqtt message to topic: mytopic
-  sendMessage(message: string) {
-	  console.log(message)
-    this.mqttClient?.publish('entrada/01', message);
-    this.mqttClient?.publish('entrada-led/01', message);
+  sendMessage(topic: string, message: string) {
+	  console.log(topic, message);
+    
+    this.mqttClient?.publish(topic, message);
+    this.mqttClient?.publish(topic, message);
+
+    //this.mqttClient?.publish('entrada/01', message);
+    //this.mqttClient?.publish('entrada-led/01', message);
   }
 }

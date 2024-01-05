@@ -5,6 +5,8 @@ export interface IStatusV2 extends Document {
     day: string;
     enabledAM: Boolean;
     enabledPM: Boolean;
+    updatedAtAM: Date;
+    updatedAtPM: Date;
 };
 
 const schema: Schema = new Schema({

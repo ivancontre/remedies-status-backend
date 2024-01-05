@@ -5,7 +5,8 @@ import { dbConnection } from '../database/config';
 import statusRoutes from '../routes/status';
 import statusV2Routes from '../routes/statusV2';
 import authRoutes from '../routes/auth';
-import Mqtt from './mqqt';
+import Mqtt from './mqtt';
+import { handlerMqtt } from '../controllers/mqtt';
 
 export default class Server {
     app: express.Application;
@@ -49,23 +50,7 @@ export default class Server {
 
     routes() {
         this.app.use(this.paths.status, statusRoutes);
-        this.app.use(this.paths.statusV2, statusV2Routes, async (req: Request, res: Response) => {
-
-            if (req.body.key) {
-                let { id, day, key, value } = req.body;
-
-                let message = {
-                    id,
-                    day,
-                    key,
-                    value,
-                };
-
-                this.mqtt.sendMessage(JSON.stringify(message));
-                res.status(200);
-            }
-            
-        });
+        this.app.use(this.paths.statusV2, statusV2Routes, async (req: Request, res: Response) => handlerMqtt(req, res, this.mqtt));
         this.app.use(this.paths.auth, authRoutes);
     }
 
