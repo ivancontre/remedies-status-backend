@@ -31,6 +31,8 @@ export default class Mqtt {
     // mqtt subscriptions
     this.mqttClient.subscribe('entrada/01', {qos: 0});
 
+    this.mqttClient.subscribe('entrada-led/01', {qos: 0});
+
     // When a message arrives, console.log it
     this.mqttClient.on('message', function (topic, message) {
       	console.log(message.toString());
@@ -45,5 +47,6 @@ export default class Mqtt {
   sendMessage(message: string) {
 	  console.log(message)
     this.mqttClient?.publish('entrada/01', message);
+    this.mqttClient?.publish('entrada-led/01', message);
   }
 }
