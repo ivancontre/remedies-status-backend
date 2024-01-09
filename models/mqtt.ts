@@ -15,7 +15,9 @@ export default class Mqtt {
   
   connect() {
     // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
-    this.mqttClient = mqtt.connect(this.host, { username: this.username, password: this.password });
+    const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+
+    this.mqttClient = mqtt.connect(this.host, { clientId, username: this.username, password: this.password });
 
     // Mqtt error calback
     this.mqttClient.on('error', (err) => {
