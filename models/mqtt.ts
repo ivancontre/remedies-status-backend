@@ -8,7 +8,7 @@ export default class Mqtt {
 	constructor() {
 		this.mqttClient = null;
 		this.host = process.env.EMQX_HOST || '';
-		this.username = process.env.EMQX_HOST || '';
+		this.username = process.env.EMQX_USER || '';
 		this.password =  process.env.EMQX_PASSWORD || '';
     
 	}
@@ -16,7 +16,7 @@ export default class Mqtt {
   connect() {
     // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
     const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
-
+    console.log('--------------->', this.username)
     this.mqttClient = mqtt.connect(this.host, { 
       clientId, 
       clean: true,
@@ -28,7 +28,7 @@ export default class Mqtt {
 
     // Mqtt error calback
     this.mqttClient.on('error', (err) => {
-      	console.log(err);
+      	console.log({err});
       	this.mqttClient?.end();
     });
 
