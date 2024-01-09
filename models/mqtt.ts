@@ -22,7 +22,8 @@ export default class Mqtt {
       clean: true,
       connectTimeout: 4000,
       username: this.username, 
-      password: this.password 
+      password: this.password,
+      reconnectPeriod: 1000,
     });
 
     // Mqtt error calback
