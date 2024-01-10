@@ -16,14 +16,11 @@ export default class Mqtt {
   connect() {
     // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
     const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
-    console.log('--------------->', this.username)
+    console.log({clientId})
     this.mqttClient = mqtt.connect(this.host, { 
-      clientId, 
-      clean: true,
-      connectTimeout: 4000,
+      clientId,
       username: this.username, 
-      password: this.password,
-      reconnectPeriod: 1000,
+      password: this.password
     });
 
     // Mqtt error calback
