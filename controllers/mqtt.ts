@@ -16,7 +16,7 @@ export const handlerMqtt = async (req: Request, res: Response, mqtt: Mqtt) => {
     
             const user = await UserModel.findById(id);
 
-            
+            console.log(id, 'esta enviando un mensaje')
     
             const esp32: IUser[] = user?.esp32 as IUser[];
     
