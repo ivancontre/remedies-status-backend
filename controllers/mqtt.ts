@@ -40,3 +40,34 @@ export const handlerMqtt = async (req: Request, res: Response, mqtt: Mqtt) => {
     
     res.status(200);
 };
+
+export const handlerMqttV3 = async (req: Request, res: Response, mqtt: Mqtt) => {
+
+    switch (req.body.action) {
+        case "UPDATE_ONE":
+            const { 
+                id, 
+                day,
+                key,
+                enabled,
+                servo,
+                led
+            } = req.body;
+    
+            const user = await UserModel.findById(id);
+
+            console.log(id, 'esta enviando un mensaje');    
+            
+            const message = `esp32=${servo.numberESP32}&pin=${servo.pin}&enabled=${enabled}`;
+            console.log(message)
+            console.log(id, 'Enviando mensaje a', servo.topic);
+            mqtt.sendMessage(servo.topic, message);
+            
+            break;
+    
+        default:
+            break;
+    }
+    
+    res.status(200);
+};

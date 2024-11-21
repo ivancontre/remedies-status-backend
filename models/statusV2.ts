@@ -7,6 +7,7 @@ export interface IStatusV2 extends Document {
     enabledPM: Boolean;
     updatedAtAM: Date;
     updatedAtPM: Date;
+    week: number;
 };
 
 const schema: Schema = new Schema({
@@ -27,6 +28,9 @@ const schema: Schema = new Schema({
     },
     updatedAtPM: { 
         type: Date
+    },
+    week: {
+        type: Number
     }
 });
 

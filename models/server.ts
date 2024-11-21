@@ -4,9 +4,10 @@ import { createServer, Server as ServerHttp } from 'http';
 import { dbConnection } from '../database/config';
 import statusRoutes from '../routes/status';
 import statusV2Routes from '../routes/statusV2';
+import statusV3Routes from '../routes/statusV3';
 import authRoutes from '../routes/auth';
 import Mqtt from './mqtt';
-import { handlerMqtt } from '../controllers/mqtt';
+import { handlerMqtt, handlerMqttV3 } from '../controllers/mqtt';
 
 export default class Server {
     app: express.Application;
@@ -27,7 +28,8 @@ export default class Server {
         this.paths = {
             auth: '/api/auth',
             status: '/api/status',
-            statusV2: '/api/v2/status'
+            statusV2: '/api/v2/status',
+            statusV3: '/api/v3/status'
         };
     }
 
@@ -51,6 +53,7 @@ export default class Server {
     routes() {
         this.app.use(this.paths.status, statusRoutes);
         this.app.use(this.paths.statusV2, statusV2Routes, async (req: Request, res: Response) => handlerMqtt(req, res, this.mqtt));
+        this.app.use(this.paths.statusV3, statusV3Routes, async (req: Request, res: Response) => handlerMqttV3(req, res, this.mqtt));
         this.app.use(this.paths.auth, authRoutes);
     }
 
