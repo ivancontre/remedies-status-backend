@@ -16,6 +16,34 @@ export const getLaunchs = async (req: Request, res: Response) => {
     }
 };
 
+export const getLaunch = async (req: Request, res: Response) => {
+    try {
+        const launch = await LaunchModel.findOne({});
+
+        let ruler = '';
+        if (launch?.A && launch?.B && launch?.C) {
+            ruler = 'launch=TODOS&show=true';            
+        } else if (!launch?.A && !launch?.B && !launch?.C) {
+            ruler = 'launch=TODOS&show=false';   
+        } else if (launch?.A && !launch?.B && !launch?.C) {
+            ruler = 'launch=A&show=true';   
+        } else if (!launch?.A && launch?.B && !launch?.C) {
+            ruler = 'launch=B&show=true';   
+        } else {
+            ruler = 'launch=C&show=true'; 
+        }
+
+        return res.status(200).json([{ruler}]);
+
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Por favor hable con el administrador'
+        });
+    }
+};
+
 export const updateLaunch = async (req: Request, res: Response) => {
     try { 
         const { id } = req.params;
