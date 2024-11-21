@@ -4,6 +4,7 @@ import { createServer, Server as ServerHttp } from 'http';
 import { dbConnection } from '../database/config';
 import statusRoutes from '../routes/status';
 import statusV2Routes from '../routes/statusV2';
+import launchRoutes from '../routes/launch';
 import authRoutes from '../routes/auth';
 import Mqtt from './mqtt';
 import { handlerMqtt } from '../controllers/mqtt';
@@ -27,7 +28,8 @@ export default class Server {
         this.paths = {
             auth: '/api/auth',
             status: '/api/status',
-            statusV2: '/api/v2/status'
+            statusV2: '/api/v2/status',
+            launch: '/api/launch'
         };
     }
 
@@ -52,6 +54,7 @@ export default class Server {
         this.app.use(this.paths.status, statusRoutes);
         this.app.use(this.paths.statusV2, statusV2Routes, async (req: Request, res: Response) => handlerMqtt(req, res, this.mqtt));
         this.app.use(this.paths.auth, authRoutes);
+        this.app.use(this.paths.launch, launchRoutes);
     }
 
     async connectToDB() {
