@@ -15,7 +15,7 @@ export default class Mqtt {
   
   connect() {
     // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
-    const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+    const clientId = process.env.EMQX_USER || ''
     console.log({clientId})
     this.mqttClient = mqtt.connect(this.host, { 
       clientId,
