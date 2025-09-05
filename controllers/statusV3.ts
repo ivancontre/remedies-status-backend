@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response} from 'express';
-import { DayTrip, StatusV2Model, StatusV3Model, UserModel } from '../models';
-import { ESP32 } from '../models/statusV3';
+import { DayTrip, IStatusV3, StatusV2Model, StatusV3Model, UserModel } from '../models';
+//import { ESP32 } from '../models/statusV3';
 
 export const getStatusV3 = async (req: Request, res: Response) => {
     try {
@@ -38,26 +38,15 @@ export const updateStatusV3 = async (req: Request, res: Response, next: NextFunc
         
         res.status(200).json(response);
 
-        const status = response.find(s => s.id === id);
+        const status = response.find(s => s.id === id) as IStatusV3;
 
-        let servo, led;
-        switch (day_trip) {
-            case 'morning':
-                servo = status?.morning.servo;
-                led = status?.morning.led;
-                break;
-            case 'afternoon':
-                servo = status?.afternoon.servo;
-                led = status?.afternoon.led;
-                break;
-            case 'nigth':
-                servo = status?.nigth.servo;
-                led = status?.nigth.led;
-                break;
-        }       
+        type DayTrip = "morning" | "afternoon" | "nigth";
 
-        req.body.servo = servo;
-        req.body.led = led;
+        const esp32Number = status[day_trip as DayTrip].numberESP32;
+        const pin = status[day_trip as DayTrip].pin;
+
+        req.body.esp32Number = esp32Number;
+        req.body.pin = pin;     
 
         next();
 

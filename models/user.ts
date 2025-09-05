@@ -5,8 +5,9 @@ export interface IUser extends Document{
     email: string;
     password: string;
     online: boolean;
-    esp32: PopulatedDoc<IUser>[]
-    user: PopulatedDoc<IUser>
+    esp32: PopulatedDoc<IUser>[];
+    user: PopulatedDoc<IUser>;
+    esp32Id: string;
 };
 
 const schema: Schema = new Schema({
@@ -36,6 +37,10 @@ const schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         default: null
+    },
+    esp32Id: { 
+        type: String, 
+        required:  [true, 'the "esp32Id" is required']  
     }
 });
 
