@@ -24,7 +24,7 @@ export const updateStatusV2 = async (req: Request, res: Response, next: NextFunc
 
         const { key, value, close_rest } = req.body;
 
-        const filter = { _id: id, user: req.body.id, };
+        const filter = { _id: id, user: req.body.id };
 
         let body : any = {};
         body[key] = value;
@@ -35,7 +35,7 @@ export const updateStatusV2 = async (req: Request, res: Response, next: NextFunc
         await StatusV2Model.findOneAndUpdate(filter, body, { new: true });
 
         if (close_rest) {
-            const status = await StatusV2Model.find({_id: {$ne: id}});
+            const status = await StatusV2Model.find({ _id: { $ne: id }, user: req.body.id });
             for (const s of status) {
                 let body: any = {};
 
@@ -49,8 +49,20 @@ export const updateStatusV2 = async (req: Request, res: Response, next: NextFunc
                     body['updatedAtPM'] = date;
                 }
                 
-                await StatusV2Model.findOneAndUpdate({_id: s._id}, body, { new: true });
+                await StatusV2Model.findOneAndUpdate({ _id: s._id }, body, { new: true });
             }
+
+            let b: any = {};
+            if (key === 'enabledAM') {
+                b['enabledPM'] = false;
+                b['updatedAtPM'] = date;
+                
+            } else {
+                b['enabledAM'] = false;
+                b['updatedAtAM'] = date;
+            }
+
+            await StatusV2Model.findOneAndUpdate(filter, b, { new: true });
         }
 
         const respoonse = await StatusV2Model.find({ user: req.body.id });   
